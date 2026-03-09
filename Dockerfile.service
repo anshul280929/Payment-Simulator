@@ -1,0 +1,24 @@
+FROM eclipse-temurin:21-jdk AS build
+WORKDIR /app
+COPY common-lib/pom.xml common-lib/pom.xml
+COPY common-lib/src common-lib/src
+WORKDIR /app/common-lib
+RUN --mount=type=cache,target=/root/.m2 \
+    apt-get update && apt-get install -y maven && \
+    mvn clean install -DskipTests
+
+FROM eclipse-temurin:21-jdk AS service-build
+ARG SERVICE_NAME
+WORKDIR /app
+COPY --from=build /root/.m2 /root/.m2
+COPY ${SERVICE_NAME}/pom.xml .
+COPY ${SERVICE_NAME}/src ./src
+RUN apt-get update && apt-get install -y maven && \
+    mvn clean package -DskipTests
+
+FROM eclipse-temurin:21-jre
+ARG SERVICE_NAME
+WORKDIR /app
+COPY --from=service-build /app/target/*.jar app.jar
+EXPOSE 8080
+ENTRYPOINT ["java", "-jar", "app.jar"]
