@@ -1,0 +1,82 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials, RETAIN_UNIQUE
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins: "http://localhost:3000"
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - OPTIONS
+            allowedHeaders: "*"
+            allowCredentials: true
+      routes:
+        # Auth Service - no JWT required
+        - id: auth-service
+          uri: lb://auth-service
+          predicates:
+            - Path=/api/auth/**
+
+        # Merchant Service
+        - id: merchant-service
+          uri: lb://merchant-service
+          predicates:
+            - Path=/api/merchants/**
+          filters:
+            - name: JwtAuthFilter
+
+        # Payment Gateway Service
+        - id: payment-gateway-service
+          uri: lb://payment-gateway-service
+          predicates:
+            - Path=/api/payments/**
+          filters:
+            - name: JwtAuthFilter
+
+        # Transaction Service
+        - id: transaction-service
+          uri: lb://transaction-service
+          predicates:
+            - Path=/api/transactions/**
+          filters:
+            - name: JwtAuthFilter
+
+        # Fraud Detection Service
+        - id: fraud-detection-service
+          uri: lb://fraud-detection-service
+          predicates:
+            - Path=/api/fraud/**
+          filters:
+            - name: JwtAuthFilter
+
+        # Settlement Service
+        - id: settlement-service
+          uri: lb://settlement-service
+          predicates:
+            - Path=/api/settlements/**
+          filters:
+            - name: JwtAuthFilter
+
+jwt:
+  secret: ${JWT_SECRET:c2VjdXJlLXBheW1lbnQtZ2F0ZXdheS1zaW11bGF0b3Itand0LXNlY3JldC1rZXktMjAyNg==}
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE:http://localhost:8761/eureka/}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
