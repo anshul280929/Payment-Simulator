@@ -6,8 +6,8 @@ spring:
     name: merchant-service
   datasource:
     url: jdbc:postgresql://localhost:5432/merchant_db
-    username: payment_user
-    password: payment_pass
+    username: ${SPRING_DATASOURCE_USERNAME:payment_user}
+    password: ${SPRING_DATASOURCE_PASSWORD}
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:

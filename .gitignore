@@ -1,3 +1,6 @@
+# Secrets
+.env
+
 # Java
 *.class
 *.jar

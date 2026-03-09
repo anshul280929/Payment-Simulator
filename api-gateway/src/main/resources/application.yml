@@ -68,7 +68,7 @@ spring:
             - name: JwtAuthFilter
 
 jwt:
-  secret: ${JWT_SECRET:c2VjdXJlLXBheW1lbnQtZ2F0ZXdheS1zaW11bGF0b3Itand0LXNlY3JldC1rZXktMjAyNg==}
+  secret: ${JWT_SECRET}
 
 eureka:
   client:
