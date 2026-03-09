@@ -1,0 +1,36 @@
+server:
+  port: 8085
+
+spring:
+  application:
+    name: fraud-detection-service
+  datasource:
+    url: jdbc:postgresql://localhost:5432/fraud_db
+    username: payment_user
+    password: payment_pass
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE:http://localhost:8761/eureka/}
+
+fraud:
+  rules:
+    block-amount-threshold: 10000
+    review-amount-threshold: 5000
+    velocity-window-seconds: 60
+    velocity-max-transactions: 3
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
