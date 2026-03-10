@@ -6,8 +6,8 @@ spring:
     name: transaction-service
   datasource:
     url: jdbc:postgresql://localhost:5432/transaction_db
-    username: ${SPRING_DATASOURCE_USERNAME:payment_user}
-    password: ${SPRING_DATASOURCE_PASSWORD}
+    username: ${SPRING_DATASOURCE_USERNAME:anshul}
+    password: ${SPRING_DATASOURCE_PASSWORD:anshul123}
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
@@ -20,7 +20,7 @@ spring:
     host: ${SPRING_RABBITMQ_HOST:localhost}
     port: 5672
     username: ${RABBITMQ_USERNAME:guest}
-    password: ${RABBITMQ_PASSWORD}
+    password: ${RABBITMQ_PASSWORD:guest}
 
 eureka:
   client:
