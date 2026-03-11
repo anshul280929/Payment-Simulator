@@ -22,14 +22,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return saved ? JSON.parse(saved) : null;
   });
 
-  const login = async (username: string, password: string) => {
-    const response = await authApi.login({ username, password });
-    const data: AuthResponse = response.data;
-    const u: User = { username: data.username, role: data.role, token: data.token };
-    localStorage.setItem('token', data.token);
-    localStorage.setItem('user', JSON.stringify(u));
-    setUser(u);
-  };
+  
 
   const logout = () => {
     localStorage.removeItem('token');
