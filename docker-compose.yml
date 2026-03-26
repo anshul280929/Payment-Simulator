@@ -15,7 +15,7 @@ services:
       - postgres_data:/var/lib/postgresql/data
       - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER}"]
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -120,6 +120,8 @@ services:
       RABBITMQ_PASSWORD: ${RABBITMQ_DEFAULT_PASS}
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://discovery-server:8761/eureka/
       ENCRYPTION_SECRET_KEY: ${ENCRYPTION_SECRET_KEY}
+      FRAUD_DETECTION_URL: http://fraud-detection-service:8085
+      ISSUER_BANK_URL: http://issuer-bank-simulator:8083
     depends_on:
       postgres:
         condition: service_healthy
